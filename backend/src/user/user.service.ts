@@ -15,6 +15,10 @@ export class UserService {
     return await newUser.save();
   }
 
+  async findByemail(email:string){
+    return await this.userentity.findOne({email})
+  }
+
   async findAll() {
      return await this.userentity.find()
   }

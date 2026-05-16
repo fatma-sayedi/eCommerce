@@ -6,6 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { SubcategoryModule } from './subcategory/subcategory.module';
 import { ProductModule } from './product/product.module';
 import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [//connect to database
@@ -13,7 +14,8 @@ import { UserModule } from './user/user.module';
     CategoryModule,
     SubcategoryModule,
     ProductModule,
-    UserModule],
+    UserModule,
+    AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })
