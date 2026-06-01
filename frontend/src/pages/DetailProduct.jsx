@@ -1,8 +1,28 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Toabar from '../components/Toabar'
 import Footer from '../components/Footer'
+import axios from 'axios'
+import { useParams } from 'react-router-dom'
 
 const DetailProduct = () => {
+  //Récupérer l'id from url
+  const {id}=useParams()
+  const[productDetail,setProductdetail] = useState(null)
+  useEffect(()=>{
+    const fetchByid= async()=>{
+      try {
+        const response = await axios.get(`http://localhost:3001/product/${id}`)
+        setProductdetail(response.data)
+        
+      } catch (error) {
+        console.log('failed to find detailProduct')
+        
+      }
+    }
+fetchByid() 
+
+  },[])
+  if(!productDetail){return <h1>Product not found</h1>}
   return (
    <div>
     <Toabar/>
@@ -13,16 +33,16 @@ const DetailProduct = () => {
         <div id="product-carousel" className="carousel slide" data-ride="carousel">
           <div className="carousel-inner border">
             <div className="carousel-item active">
-              <img className="w-100 h-100" src="img/product-1.jpg" alt="Image" />
+              <img className="w-100 h-100" src={productDetail?.image} alt="Image" />
             </div>
             <div className="carousel-item">
-              <img className="w-100 h-100" src="img/product-2.jpg" alt="Image" />
+              <img className="w-100 h-100" src={productDetail?.image} alt="Image" />
             </div>
             <div className="carousel-item">
-              <img className="w-100 h-100" src="img/product-3.jpg" alt="Image" />
+              <img className="w-100 h-100" src={productDetail?.image} alt="Image" />
             </div>
             <div className="carousel-item">
-              <img className="w-100 h-100" src="img/product-4.jpg" alt="Image" />
+              <img className="w-100 h-100" src={productDetail?.image}  alt="Image" />
             </div>
           </div>
           <a className="carousel-control-prev" href="#product-carousel" data-slide="prev">
@@ -34,7 +54,7 @@ const DetailProduct = () => {
         </div>
       </div>
       <div className="col-lg-7 pb-5">
-        <h3 className="font-weight-semi-bold">Colorful Stylish Shirt</h3>
+        <h3 className="font-weight-semi-bold"> {productDetail?.name}</h3>
         <div className="d-flex mb-3">
           <div className="text-primary mr-2">
             <small className="fas fa-star" />
@@ -45,8 +65,10 @@ const DetailProduct = () => {
           </div>
           <small className="pt-1">(50 Reviews)</small>
         </div>
-        <h3 className="font-weight-semi-bold mb-4">$150.00</h3>
-        <p className="mb-4">Volup erat ipsum diam elitr rebum et dolor. Est nonumy elitr erat diam stet sit clita ea. Sanc invidunt ipsum et, labore clita lorem magna lorem ut. Erat lorem duo dolor no sea nonumy. Accus labore stet, est lorem sit diam sea et justo, amet at lorem et eirmod ipsum diam et rebum kasd rebum.</p>
+        <h3 className="font-weight-semi-bold mb-4">{productDetail.price}</h3>
+        <p className="mb-4">{productDetail.description
+          
+          }</p>
         <div className="d-flex mb-3">
           <p className="text-dark font-weight-medium mb-0 mr-3">Sizes:</p>
           <form>

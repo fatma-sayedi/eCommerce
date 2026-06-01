@@ -1,8 +1,34 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Toabar from '../components/Toabar'
 import Footer from '../components/Footer'
+import axios from 'axios'
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { registerAction } from '../redux/actions/userActions';
+
 
 const Register = () => {
+  const[name,setName] = useState("")
+const[email,setEmail]= useState("")
+const[address,setAddress]= useState("")
+const[phoneNumber,setPhoneNumber]= useState("")
+const[password,setPassword]= useState("")
+const navigate = useNavigate()
+  const dispatch = useDispatch()
+const handleRegister = async(event)=>{
+
+try {
+  event.preventDefault()
+    dispatch(registerAction({name,email,address,phoneNumber,password}))
+        navigate("/login")
+  
+} catch (error) {
+  console.error("failed to register")
+
+  
+}
+
+}
   return (
     
     <div>
@@ -16,26 +42,26 @@ const Register = () => {
     <div className="col-lg-7 mb-5">
       <div className="contact-form">
         <div id="success" />
-        <form name="sentMessage" id="contactForm" noValidate="novalidate">
+        <form  onSubmit={handleRegister} name="sentMessage" id="contactForm" noValidate="novalidate">
           <div className="control-group">
-            <input type="text" className="form-control" id="name" placeholder="Your Full Name" required="required" data-validation-required-message="Please enter your name" />
+            <input  value ={name} onChange={(e)=>setName(e.target.value)} type="text" className="form-control" id="name" placeholder="Your Full Name" required="required" data-validation-required-message="Please enter your name" />
             <p className="help-block text-danger" />
           </div>
           <div className="control-group">
-            <input type="email" className="form-control" id="email" placeholder="Your Email" required="required" data-validation-required-message="Please enter your email" />
+            <input  value ={email} onChange={(e)=>setEmail(e.target.value)}type="email" className="form-control" id="email" placeholder="Your Email" required="required" data-validation-required-message="Please enter your email" />
             <p className="help-block text-danger" />
           </div>
             <div className="control-group">
-            <input type="text" className="form-control" id="email" placeholder="Adress" required="required" data-validation-required-message="Please enter your email" />
+            <input  value ={address} onChange={(e)=>setAddress(e.target.value)} type="text" className="form-control" id="address" placeholder="Address" required="required" data-validation-required-message="Please enter your email" />
             <p className="help-block text-danger" />
           </div>
           
           <div className="control-group">
-            <input type="password" className="form-control" id="subject" placeholder="Password" required="required" data-validation-required-message="Please enter a subject" />
+            <input  value ={password} onChange={(e)=>setPassword(e.target.value)}  type="password" className="form-control" id="subject" placeholder="Password" required="required" data-validation-required-message="Please enter a subject" />
             <p className="help-block text-danger" />
           </div>
             <div className="control-group">
-            <input type="number" className="form-control" id="email" placeholder="Your Phone Number" required="required" data-validation-required-message="Please enter your email" />
+            <input  value ={phoneNumber} onChange={(e)=>setPhoneNumber(e.target.value)} type="number" className="form-control" id="email" placeholder="Your Phone Number" required="required" data-validation-required-message="Please enter your email" />
             <p className="help-block text-danger" />
           </div>
            <div>

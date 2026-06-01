@@ -12,7 +12,7 @@ import { Subcategory } from 'src/subcategory/entities/subcategory.entity';
 export class ProductController {
   constructor(private readonly productService: ProductService) { }
 
-  @Post()
+  @Post("/addproduct")
   //configuration swagger for multer
   @ApiConsumes('multipart/form-data')
   @ApiBody({

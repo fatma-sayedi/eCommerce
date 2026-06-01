@@ -7,10 +7,18 @@ import { Model } from 'mongoose';
 import { UserService } from 'src/user/user.service';
 import * as argon2 from 'argon2';
 import { console } from 'inspector';
+import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import { EmailService } from 'mail/mail.service';
 
 @Injectable()
 export class AuthService {
-  constructor(private userService : UserService){}
+  constructor(private userService : UserService,
+    private jwtservice: JwtService,
+    private configService: ConfigService,
+    private emailService : EmailService
+
+  ){}
   async register(createuserDto: CreateUserDto) {
   const existingUser = await this.userService.findByemail(createuserDto.email)
 
@@ -25,6 +33,20 @@ export class AuthService {
   return newUser
   }
 
+  async generateTokens(userId:string, email:string){
+    const[accessToken, refreshToken ] = await Promise.all([
+      this.jwtservice.signAsync(
+        {sub:userId, email},
+        {secret:this.configService.get<string>("ACCESSKEY"),expiresIn:"3d"}
+      ),
+
+       this.jwtservice.signAsync(
+        {sub:userId, email},
+        {secret:this.configService.get<string>("REFRESHKEY"),expiresIn:"10w"}
+      )
+    ]) 
+    return {accessToken, refreshToken}
+  }
   async login(createAuthDto: CreateAuthDto) {
   const existingUser = await this.userService.findByemail(createAuthDto.email)
 
@@ -38,8 +60,32 @@ export class AuthService {
   if(!matchedpassword){
     throw new NotFoundException("password doesn't match")
   }
+  const tokens = await this.generateTokens(existingUser._id.toString(),existingUser.email)
   
-  return existingUser
+  return {existingUser, tokens}
+
+
+  }
+  async forgotPassword (email:string){
+     const existingUser = await this.userService.findByemail(email)
+
+  //verifier si user avec cet email exist ou non
+  if(!existingUser){
+    throw new NotFoundException("user with this email doesn't exist")
+
+  }
+  const subject ="reset Password" 
+  const link = "http://localhost:3000/resetPassword"
+  const htmlMessage =`<h2 >hello ${existingUser.name}
+  <p>please use this link to reset your password</p>
+  <a href= 'link'>${link }</a> `
+  const emailSend = await this.emailService.sendResetEmail(existingUser.email, subject, htmlMessage)
+  if(emailSend){
+    return ("reset email send successfully") }
+    else
+    {return("failure reset send email")}
+
+
   }
   findAll() {
     return `This action returns all auth`;

@@ -1,15 +1,30 @@
 import React, { useState } from 'react'
 import Toabar from '../components/Toabar'
 import Footer from '../components/Footer'
+import axios from 'axios'
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { loginAction } from '../redux/actions/userActions';
 
 const Login = () => {
     const[email, setEmail] = useState("")
     const[password, setPassword] = useState("")
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
     const handleLogin = async(event)=>{
+      try {
         event.preventDefault()
         //appel de api depuis le backend //
-        console.log("email saisie:" , email)
-        console.log("password saisie:" , password)
+        dispatch(loginAction({email,password}))
+        
+        navigate("/")
+
+      } catch (error) {
+        console.error("failed to connect")
+        
+      }
+        
+       
 
     }
   return (

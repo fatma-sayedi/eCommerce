@@ -2,19 +2,24 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Toabar from './Toabar'
 import axios from "axios";
+import { getAllProductsAction } from '../redux/actions/productActions';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Products = () => {
 
-  const [ListProduct, setListProduct] = useState([])
+  /* const [ListProduct, setListProduct] = useState([]) */
+  const ListProduct=useSelector(state=>state.product.productlist)
+  /* state.nameofSlice.initialState */
+    const dispatch = useDispatch()
   //Affichage du contenu de la page dynamiquement
   useEffect(() => {
     //fonction fléchée 
     const fetchProduct =async () => {
       try {
         //appel de api depuis le backend
-       const response =await axios.get('http://localhost:3001/product')
-        setListProduct(response.data)
-        console.log("list des produits",response.data)
+    await dispatch(getAllProductsAction({}))
+        /* setListProduct(response.data) */
+       /*  console.log("list des produits",response.data) */
 
         console.log("List of Product loaded successfully")
       } catch (error) {
@@ -48,7 +53,7 @@ const Products = () => {
                   </div>
                 </div>
                 <div className="card-footer d-flex justify-content-between bg-light border">
-                  <Link to="/detail" className="btn btn-sm text-dark p-0"><i className="fas fa-eye text-primary mr-1" />View Detail</Link>
+                  <Link to={`/detail/${i._id}`} className="btn btn-sm text-dark p-0"><i className="fas fa-eye text-primary mr-1" />View Detail</Link>
                   <a href className="btn btn-sm text-dark p-0"><i className="fas fa-shopping-cart text-primary mr-1" />Add To Cart</a>
                 </div>
               </div>

@@ -1,16 +1,20 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { gettAllcategoryAction } from '../redux/actions/categoryAction'
 
 const Navbar = () => {
 
- const [categoriesList, setCategoriesList]=useState([])
+/*  const [categoriesList, setCategoriesList]=useState([]) */
+   const Listcategory=useSelector(state=>state.category.categorylist)
+   const dispatch = useDispatch()
   useEffect(()=>{
 const fetchCatégories=async()=>{
   try {
-      const response =await axios.get('http://localhost:3001/category')
-      setCategoriesList(response.data)
-    console.log("la liste de catagories est",response.data)
+      dispatch(gettAllcategoryAction())
+      /* setCategoriesList(response.data) */
+   /*  console.log("la liste de catagories est",response.data) */
   } catch (error) {
     console.error("failed to load list of catégories", error)
   }  
@@ -29,7 +33,7 @@ fetchCatégories()
         <nav className="collapse show navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0" id="navbar-vertical">
           <div className="navbar-nav w-100 overflow-hidden" style={{height: 410}}>
             <div className="nav-item dropdown">
-              {categoriesList.map(i=>(
+              {Listcategory.map(i=>(
                 <>
                  <a href="#" className="nav-link" data-toggle="dropdown">{i.name} <i className="fa fa-angle-down float-right mt-1" /></a>
               {i?.subcategoriesId.map((c)=>(
