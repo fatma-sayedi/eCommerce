@@ -21,6 +21,9 @@ const fetchCatégories=async()=>{
 }
 fetchCatégories()
   },[])
+
+  const userConnected = useSelector(state=>state.user.curentUser)
+  console.log(userConnected)
   return (
    <div>    {/* Navbar Start */}
   <div className="container-fluid mb-5">
@@ -36,16 +39,13 @@ fetchCatégories()
               {Listcategory.map(i=>(
                 <>
                  <a href="#" className="nav-link" data-toggle="dropdown">{i.name} <i className="fa fa-angle-down float-right mt-1" /></a>
+                 <div className="dropdown-menu position-absolute bg-secondary border-0 rounded-0 w-100 m-0">
               {i?.subcategoriesId.map((c)=>(
-                  <div className="dropdown-menu position-absolute bg-secondary border-0 rounded-0 w-100 m-0">
-                  <a href className="dropdown-item">{c.name}</a>
-                   </div>
+                <a href className="dropdown-item">{c.name}</a> 
                   )
                  )}
-               
-               
-             
-              </>
+                 </div>
+               </>
               ))}
              
             </div>
@@ -74,10 +74,15 @@ fetchCatégories()
               </div>
               <a href="contact.html" className="nav-item nav-link">Contact</a>
             </div>
-            <div className="navbar-nav ml-auto py-0">
+            {userConnected?(<h5>welcome {userConnected.existingUser.name}</h5>):(
+              <div className="navbar-nav ml-auto py-0">
+
               <Link to = "/login" className="nav-item nav-link">Login</Link>
                <Link to = "/register" className="nav-item nav-link">Register</Link>
-            </div>
+            </div>)
+
+            }
+            
           </div>
         </nav>
         <div id="header-carousel" className="carousel slide" data-ride="carousel">

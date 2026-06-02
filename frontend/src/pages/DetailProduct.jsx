@@ -3,16 +3,19 @@ import Toabar from '../components/Toabar'
 import Footer from '../components/Footer'
 import axios from 'axios'
 import { useParams } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { DetailProductAction } from '../redux/actions/productActions'
 
 const DetailProduct = () => {
   //Récupérer l'id from url
   const {id}=useParams()
-  const[productDetail,setProductdetail] = useState(null)
+ const productDetail= useSelector(state=>state.product.productDetail)
+  const dispatch=useDispatch()
   useEffect(()=>{
     const fetchByid= async()=>{
       try {
-        const response = await axios.get(`http://localhost:3001/product/${id}`)
-        setProductdetail(response.data)
+       dispatch(DetailProductAction(id))
+        
         
       } catch (error) {
         console.log('failed to find detailProduct')
