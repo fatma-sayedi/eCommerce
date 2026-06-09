@@ -7,7 +7,7 @@ import { gettAllcategoryAction } from '../redux/actions/categoryAction'
 const Navbar = () => {
 
 /*  const [categoriesList, setCategoriesList]=useState([]) */
-   const Listcategory=useSelector(state=>state.category.categorylist)
+   const Listcategory=useSelector(state=>state.categories.categoryList||[])
    const dispatch = useDispatch()
   useEffect(()=>{
 const fetchCatégories=async()=>{
@@ -74,7 +74,7 @@ fetchCatégories()
               </div>
               <a href="contact.html" className="nav-item nav-link">Contact</a>
             </div>
-            {userConnected?(<h5>welcome {userConnected.existingUser.name}</h5>):(
+            {userConnected?(<h5>welcome {userConnected?.existingUser?.name}</h5>):(
               <div className="navbar-nav ml-auto py-0">
 
               <Link to = "/login" className="nav-item nav-link">Login</Link>

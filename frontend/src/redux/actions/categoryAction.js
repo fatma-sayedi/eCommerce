@@ -17,3 +17,16 @@ export const gettAllcategoryAction = createAsyncThunk(
 
 
 )
+
+export const ajoutcategoryAction = createAsyncThunk(
+    "category/add",
+    async (categoryData, { rejectedWithValue }) => {
+        try {
+            const response = await axios.post('http://localhost:3001/category', categoryData);
+            return response.data;
+        } catch (error) {
+            console.error("failed to add category", error);
+            return rejectedWithValue(error.response.data);
+        }
+    }
+);

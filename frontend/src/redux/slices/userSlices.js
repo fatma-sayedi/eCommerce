@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { loginAction, registerAction } from "../actions/userActions"
+import { forgotPasswordAction, loginAction, registerAction } from "../actions/userActions"
 
 const initialState = {
     error:null,
@@ -51,7 +51,23 @@ state.error=payload
 
 })
 
+.addCase(forgotPasswordAction.pending,(state)=>
+{
+state.isFetching=true
+state.error=null
+})
+.addCase(forgotPasswordAction.fulfilled,(state,{payload})=>//success
+{
+state.isFetching=false
+state.error=null
+state.curentUser=payload // retour d api
+})
+.addCase(forgotPasswordAction.rejected,(state,{payload})=>
+{
+state.isFetching=false
+state.error=payload
 
+})
 
 } }
 

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { DetailProductAction, getAllProductsAction } from "../actions/productActions"
+import { ajoutproduitAction, DetailProductAction, getAllProductsAction } from "../actions/productActions"
 
 const initialState = {
     error:null,
@@ -48,6 +48,25 @@ state.error=null
 state.productDetail=payload
 })
 .addCase(DetailProductAction.rejected,(state,{payload})=>
+{
+state.isFetching=false
+state.error=payload
+
+})
+
+
+.addCase(ajoutproduitAction.pending,(state)=>
+{
+state.isFetching=true
+state.error=null
+})
+.addCase(ajoutproduitAction.fulfilled,(state,{payload})=>//success
+{
+state.isFetching=false
+state.error=null
+state.productDetail=payload
+})
+.addCase(ajoutproduitAction.rejected,(state,{payload})=>
 {
 state.isFetching=false
 state.error=payload

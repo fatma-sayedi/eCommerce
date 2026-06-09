@@ -1,4 +1,4 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk, isRejectedWithValue } from "@reduxjs/toolkit";
 import axios from "axios";
 
 export const loginAction=createAsyncThunk(
@@ -18,6 +18,21 @@ export const registerAction=createAsyncThunk(
     async ({name,email,address,phoneNumber,password},{rejectwithvalue})=>{
         try {
             const response=await axios.post("http://localhost:3001/auth/register",{name,email,address,phoneNumber,password})
+             return response.data        } 
+             catch (error) {
+        
+         rejectwithvalue(error.response.data)   
+        }
+    }
+)
+
+export const forgotPasswordAction=createAsyncThunk(
+
+    "user/forgot",
+    async({email},{rejectwithvalue})=>{
+
+         try {
+            const response=await axios.post("http://localhost:3001/auth/forgotPassword",{email})
              return response.data        } 
              catch (error) {
         

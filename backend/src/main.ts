@@ -10,7 +10,10 @@ async function bootstrap() {
   //autoriser le backend pour communiquer avec le frontend
   app.enableCors({ origin: '*', Credentials: true });
 //Rendre l'image accessible via une URL
-  app.use('/uploads', express.static(join(__dirname, '..', 'uploads')));
+app.use(
+  '/uploads',
+  express.static(join(process.cwd(), 'uploads')),
+);
   const config = new DocumentBuilder()
   .setTitle('application ecommerce')
   .setDescription('application ecommerce')

@@ -75,7 +75,7 @@ export class AuthService {
 
   }
   const subject ="reset Password" 
-  const link = "http://localhost:3000/resetPassword"
+  const link = "http://localhost:3000/reset"
   const htmlMessage =`<h2 >hello ${existingUser.name}
   <p>please use this link to reset your password</p>
   <a href= 'link'>${link }</a> `
@@ -87,19 +87,9 @@ export class AuthService {
 
 
   }
-  findAll() {
-    return `This action returns all auth`;
-  }
+ 
+  async resetPassword(newPassword:string){
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
 
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
   }
 }

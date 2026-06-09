@@ -31,3 +31,16 @@ export const DetailProductAction = createAsyncThunk(
     }
  }
 )
+
+export const ajoutproduitAction = createAsyncThunk(
+    "product/add",
+    async (productData, { rejectedWithValue }) => {
+        try {
+            const response = await axios.post('http://localhost:3001/produit', productData);
+            return response.data;
+        } catch (error) {
+            console.error("failed to add product", error);
+            return rejectedWithValue(error.response.data);
+        }
+    }
+);
