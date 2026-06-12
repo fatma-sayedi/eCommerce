@@ -1,10 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { ajoutproduitAction, DetailProductAction, getAllProductsAction } from "../actions/productActions"
+import { ajoutproduitAction, DetailProductAction, getAllProductsAction, getProductsBySubCategoryAction } from "../actions/productActions"
 
 const initialState = {
     error:null,
     isFetching:false,
    productlist: [],
+   productsBySubCategory: [],
    productDetail:null
 
 }
@@ -72,6 +73,24 @@ state.isFetching=false
 state.error=payload
 
 })
+
+.addCase(getProductsBySubCategoryAction.pending,(state)=>
+{
+state.isFetching=true
+state.error=null
+})
+.addCase(getProductsBySubCategoryAction.fulfilled,(state,{payload})=>//success
+{
+state.isFetching=false
+state.error=null
+state.productsBySubCategory=payload
+})
+.addCase(getProductsBySubCategoryAction.rejected,(state,{payload})=>
+{
+state.isFetching=false
+state.error=payload
+})
+
 } }
 
 )

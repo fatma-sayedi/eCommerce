@@ -23,7 +23,7 @@ export class SubcategoryService {
 
   async findAll( ) {
 
-    return await this.SubCategoryentity.find();
+    return (await this.SubCategoryentity.find().populate("categoryId", "name"));
   }
 
   async findOne(id:string) {

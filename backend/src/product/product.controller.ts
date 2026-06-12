@@ -22,7 +22,7 @@ export class ProductController {
         name: {
           type: 'string',
         },
-         Subcategoryid: {
+         idsubcategory: {
           type: 'string',
         },
         price: {
@@ -76,7 +76,7 @@ export class ProductController {
         name: {
           type: 'string',
         },
-        Subcategoryid: {
+        idsubcategory: {
           type: 'string',
         },
         price: {
@@ -114,4 +114,8 @@ export class ProductController {
   remove(@Param('id') id: string) {
     return this.productService.remove(id);
   }
+  @Get('subcategory/:subcategoryId')
+  findBySubCategoryId(@Param('subcategoryId') subcategoryId: string) {
+    return this.productService.findBySubCategoryId(subcategoryId);
+  } 
 }

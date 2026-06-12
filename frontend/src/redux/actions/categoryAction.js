@@ -30,3 +30,29 @@ export const ajoutcategoryAction = createAsyncThunk(
         }
     }
 );
+
+export const deletecategoryAction = createAsyncThunk(
+    "category/delete",
+    async (id, { rejectedWithValue }) => {
+        try {
+            const response = await axios.delete(`http://localhost:3001/category/${id}`);
+            return response.data;
+        } catch (error) {
+            console.error("failed to delete category", error);
+            return rejectedWithValue(error.response.data);
+        }
+    }
+);
+
+export const updatecategoryAction = createAsyncThunk(
+    "category/update",
+    async ({ id, name }, { rejectedWithValue }) => {
+        try {
+            const response = await axios.patch(`http://localhost:3001/category/${id}`, { name });
+            return response.data;
+        } catch (error) {
+            console.error("failed to update category", error);
+            return rejectedWithValue(error.response.data);
+        }
+    }
+);

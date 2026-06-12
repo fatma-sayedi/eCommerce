@@ -35,20 +35,24 @@ fetchCatégories()
         </a>
         <nav className="collapse show navbar navbar-vertical navbar-light align-items-start p-0 border border-top-0 border-bottom-0" id="navbar-vertical">
           <div className="navbar-nav w-100 overflow-hidden" style={{height: 410}}>
-            <div className="nav-item dropdown">
-              {Listcategory.map(i=>(
-                <>
-                 <a href="#" className="nav-link" data-toggle="dropdown">{i.name} <i className="fa fa-angle-down float-right mt-1" /></a>
-                 <div className="dropdown-menu position-absolute bg-secondary border-0 rounded-0 w-100 m-0">
-              {i?.subcategoriesId.map((c)=>(
-                <a href className="dropdown-item">{c.name}</a> 
-                  )
-                 )}
-                 </div>
-               </>
-              ))}
-             
-            </div>
+            {Listcategory.map((i) => (
+              <div className="nav-item dropdown" key={i._id}>
+                <a href="#" className="nav-link" data-toggle="dropdown">
+                  {i.name} <i className="fa fa-angle-down float-right mt-1" />
+                </a>
+                <div className="dropdown-menu position-absolute bg-secondary border-0 rounded-0 w-100 m-0">
+                  {Array.isArray(i.subcategoriesId) && i.subcategoriesId.length > 0 ? (
+                    i.subcategoriesId.map((c) => (
+                      <Link key={c._id } to={`/shop/${c._id}`} className="dropdown-item">
+                        { c.name}
+                      </Link>
+                    ))
+                  ) : (
+                    <span className="dropdown-item text-muted">Aucune sous-catégorie</span>
+                  )}
+                </div>
+              </div>
+            ))}
           </div>
         </nav>
       </div>

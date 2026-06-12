@@ -7,7 +7,7 @@ export class Category {
     @Prop()
     name : string
 
-  @Prop([{type:Types.ObjectId,ref:"Subcategory"}])
+  @Prop({ type: [{ type: Types.ObjectId, ref: 'Subcategory' }], default: [] })
     subcategoriesId: Types.ObjectId[]
 }
 

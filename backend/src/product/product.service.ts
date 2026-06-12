@@ -16,11 +16,11 @@ export class ProductService {
   }
 
   async findAll() {
-    return await this.productentity.find()
+    return await this.productentity.find().populate("idsubcategory", "name");
   }
 
   async findOne(id: string) {
-     const productbyid = await this.productentity.findById(id)
+     const productbyid = await this.productentity.findById(id).populate("idsubcategory", "name")
         if (!productbyid)
         {
           throw new BadRequestException("product NOT found")
@@ -50,4 +50,8 @@ export class ProductService {
     }
     return productbyid
   }
+  async findBySubCategoryId(subcategoryId: string) {
+    return await this.productentity.find({ idsubcategory: subcategoryId }).populate("idsubcategory", "name");
+  } 
+  
 }

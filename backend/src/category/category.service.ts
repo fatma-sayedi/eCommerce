@@ -14,10 +14,10 @@ export class CategoryService {
   }
 
   async findAll( ) {
-    
-    return await this.categoryentity.find().populate('subcategoriesId')
-
-   
+    return await this.categoryentity
+      .find()
+      .populate({ path: 'subcategoriesId', select: 'name' })
+      .lean();
   }
 
   async findOne(id: string) {
