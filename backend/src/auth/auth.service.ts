@@ -92,4 +92,10 @@ export class AuthService {
 
 
   }
+
+
+  async logout(userId:string){
+    await this.userService.update(userId,{refreshToken:null})
+    return ("logged out successfully")
+}
 }

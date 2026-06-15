@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { gettAllcategoryAction } from '../redux/actions/categoryAction'
+import { logoutAction } from '../redux/actions/userActions'
+import { toast } from 'react-toastify'
 
 const Navbar = () => {
 
@@ -24,6 +26,20 @@ fetchCatégories()
 
   const userConnected = useSelector(state=>state.user.curentUser)
   console.log(userConnected)
+
+  const handleLogout = async(e)=>{
+    try {
+      await dispatch(logoutAction())
+      toast.success("success logout")
+
+      
+    } catch (error) {
+      console.error("failed to logout", error)
+      
+    }
+
+
+  }
   return (
    <div>    {/* Navbar Start */}
   <div className="container-fluid mb-5">
@@ -78,7 +94,11 @@ fetchCatégories()
               </div>
               <a href="contact.html" className="nav-item nav-link">Contact</a>
             </div>
-            {userConnected?(<h5>welcome {userConnected?.existingUser?.name}</h5>):(
+            {userConnected?(<><h5>welcome {userConnected?.existingUser?.name}</h5>
+            <button  className="nav-item nav-link" onClick={handleLogout}>
+LogOut
+            </button>
+            </>):(
               <div className="navbar-nav ml-auto py-0">
 
               <Link to = "/login" className="nav-item nav-link">Login</Link>

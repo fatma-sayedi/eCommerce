@@ -6,6 +6,8 @@ export const loginAction=createAsyncThunk(
     async ({email,password},{rejectwithvalue})=>{
         try {
              const response=await axios.post("http://localhost:3001/auth/login",{email,password})
+             const accessToken =localStorage.setItem("accessToken",response.data.tokens.accessToken)
+             const refreshToken = localStorage.setItem("refreshToken",response.data.tokens.accessToken)
              return response.data        } 
              catch (error) {
         
@@ -38,5 +40,26 @@ export const forgotPasswordAction=createAsyncThunk(
         
          rejectwithvalue(error.response.data)   
         }
+    }
+
+)
+
+
+export const logoutAction=createAsyncThunk(
+    "user/logout",
+    async(_,{rejectwithvalue})=>{
+
+
+            try {   
+                   const accessToken =localStorage.getItem("accessToken")
+             const refreshToken = localStorage.getItem("refreshToken")
+                const response=await axios.get("http://localhost:3001/auth/logout",{headers:{Authorization:`Bearer ${accessToken}`}})
+                localStorage.removeItem("accessToken")
+                  localStorage.removeItem("refreshToken")
+                return response.data
+            }
+            catch (error) {
+                rejectwithvalue(error.response.data)
+            }
     }
 )
