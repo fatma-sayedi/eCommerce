@@ -22,7 +22,12 @@ export const ajoutcategoryAction = createAsyncThunk(
     "category/add",
     async (categoryData, { rejectedWithValue }) => {
         try {
-            const response = await axios.post('http://localhost:3001/category', categoryData);
+            const accessToken = localStorage.getItem("accessToken");
+            const response = await axios.post('http://localhost:3001/category', categoryData, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
             return response.data;
         } catch (error) {
             console.error("failed to add category", error);
@@ -48,7 +53,12 @@ export const updatecategoryAction = createAsyncThunk(
     "category/update",
     async ({ id, name }, { rejectedWithValue }) => {
         try {
-            const response = await axios.patch(`http://localhost:3001/category/${id}`, { name });
+            const accessToken = localStorage.getItem("accessToken");
+            const response = await axios.patch(`http://localhost:3001/category/${id}`, { name }, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
             return response.data;
         } catch (error) {
             console.error("failed to update category", error);

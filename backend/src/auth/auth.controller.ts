@@ -31,4 +31,11 @@ export class AuthController {
     const userId = req.user.userId;
     return this.authService.logout(userId);
  }
+
+ @Post('/reset/:token')
+resetPassword(@Body() createAuthDto : CreateAuthDto,@Param("token")token:string){
+  return this.authService.resetPassword(createAuthDto.password,token)
+
+}
+
 }

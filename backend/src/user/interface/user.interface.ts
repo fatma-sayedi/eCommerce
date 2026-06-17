@@ -8,5 +8,7 @@ export interface Iuser extends Document {
     address: string
     PhoneNumber: string
     password: string
+    resetPasswordToken: string
+    resetPasswordExpires: number
 
 }

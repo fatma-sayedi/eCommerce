@@ -43,6 +43,11 @@ export class UserService {
     return  userbyid
   }
 
+  async findByresetToken(token:string){
+    return await this.userentity.findOne
+    ({resetPasswordToken:token, resetPasswordExpires:{$gt:Date.now()}})
+  }
+
   async remove(id: string) {
     const userbyid = await this.userentity.findByIdAndDelete(id)
 

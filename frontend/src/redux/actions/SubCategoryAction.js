@@ -18,7 +18,12 @@ export const addsubcategoryAction = createAsyncThunk(
     "Subcategory/add",
  async({ name, categoryId }, { rejectWithValue })=>{
     try {
-         const response = await axios.post('http://localhost:3001/subcategory', { name, categoryId })
+         const accessToken = localStorage.getItem("accessToken");
+         const response = await axios.post('http://localhost:3001/subcategory', { name, categoryId }, {
+             headers: {
+                 Authorization: `Bearer ${accessToken}`
+             }
+         });
          return response.data
     } catch (error) {
          console.error("failed to add subcategory", error)
@@ -30,7 +35,12 @@ export const deletesubcategoryAction = createAsyncThunk(
     "Subcategory/delete",
  async(id, { rejectWithValue })=>{
     try {
-         const response = await axios.delete(`http://localhost:3001/subcategory/${id}`)
+         const accessToken = localStorage.getItem("accessToken");
+         const response = await axios.delete(`http://localhost:3001/subcategory/${id}`, {
+             headers: {
+                 Authorization: `Bearer ${accessToken}`
+             }
+         });
          return response.data
     } catch (error) {
          console.error("failed to delete subcategory", error)
@@ -43,7 +53,12 @@ export const updatesubcategoryAction = createAsyncThunk(
     "Subcategory/update",
  async({ id, name, categoryId }, { rejectWithValue })=>{
     try {
-         const response = await axios.patch(`http://localhost:3001/subcategory/${id}`, { name, categoryId })
+         const accessToken = localStorage.getItem("accessToken");
+         const response = await axios.patch(`http://localhost:3001/subcategory/${id}`, { name, categoryId }, {
+             headers: {
+                 Authorization: `Bearer ${accessToken}`
+             }
+         });
          return response.data
     } catch (error) {
          console.error("failed to update subcategory", error)

@@ -31,7 +31,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/checkout" element={<Checkout />} />
-          <Route path="/reset" element={<ResetPassword />} />
+          <Route path="/reset/:token" element={<ResetPassword />} />
           {/*  Route impriquées */}
           <Route path="/layout" element={<LayoutAdmin />}>
             <Route path="gestionproduct" element={<GestionProduct />} />

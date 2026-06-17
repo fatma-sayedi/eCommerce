@@ -47,7 +47,7 @@ const Login = () => {
           <div className="col-lg-7 mb-5">
             <div className="contact-form">
               <div id="success" />
-              <form onSubmit={handleLogin} name="sentMessage" id="contactForm" noValidate="novalidate">
+              <form  name="sentMessage" id="contactForm" noValidate="novalidate">
 
                 <div className="control-group">
                   <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" className="form-control" id="email" placeholder="Your Email" required="required" data-validation-required-message="Please enter your email" />
@@ -61,7 +61,9 @@ const Login = () => {
                 </div>
 
                 <div>
-                  <button className="btn btn-primary py-2 px-4" type="submit" id="sendMessageButton">Submit</button>
+                  <button className="btn btn-primary py-2 px-4" type="submit" id="sendMessageButton"
+                  onClick={handleLogin}
+                  >Submit</button>
                   
                 </div>
                 <button

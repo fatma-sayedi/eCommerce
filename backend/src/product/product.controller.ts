@@ -1,12 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFile, UseGuards } from '@nestjs/common';
 import { ProductService } from './product.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
-import { ApiBody, ApiConsumes } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiConsumes } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { extname } from 'path';
 import { diskStorage } from 'multer';
 import { Subcategory } from 'src/subcategory/entities/subcategory.entity';
+import { AuthGuard } from '@nestjs/passport/dist/auth.guard';
 
 @Controller('product')
 export class ProductController {
@@ -52,6 +53,8 @@ export class ProductController {
       }),
     }),
   )
+    @ApiBearerAuth('accessToken')
+    @UseGuards(AuthGuard('jwt'))
   create(@Body() createProductDto: CreateProductDto,@UploadedFile() file: Express.Multer.File,) {
     return this.productService.create({...createProductDto,image:file?.filename});
   }
@@ -66,7 +69,8 @@ export class ProductController {
     return this.productService.findOne(id);
   }
 
-
+  @ApiBearerAuth('accessToken')
+  @UseGuards(AuthGuard('jwt'))
   @Patch(':id')
     @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -110,6 +114,8 @@ export class ProductController {
     return this.productService.update(id,{...updateProductDto,image:file?.filename} );
   }
 
+    @ApiBearerAuth('accessToken')
+  @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.productService.remove(id);
@@ -119,3 +125,4 @@ export class ProductController {
     return this.productService.findBySubCategoryId(subcategoryId);
   } 
 }
+

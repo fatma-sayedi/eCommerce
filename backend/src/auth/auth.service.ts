@@ -75,10 +75,14 @@ export class AuthService {
 
   }
   const subject ="reset Password" 
-  const link = "http://localhost:3000/reset"
+  const token = Math.random().toString(36).substring(2) // generate a random token
+  existingUser.resetPasswordToken = token
+  existingUser.resetPasswordExpires = Date.now() + 3600000// token expires in 1 hour
+  await existingUser.save()
+  const link = `http://localhost:3000/reset/${token}`
   const htmlMessage =`<h2 >hello ${existingUser.name}
   <p>please use this link to reset your password</p>
-  <a href= 'link'>${link }</a> `
+  <a href='${link}'>${link}</a> `
   const emailSend = await this.emailService.sendResetEmail(existingUser.email, subject, htmlMessage)
   if(emailSend){
     return ("reset email send successfully") }
@@ -88,10 +92,18 @@ export class AuthService {
 
   }
  
-  async resetPassword(newPassword:string){
-
-
-  }
+  async resetPassword(newPassword:string, token:string){
+    const user = await this.userService.findByresetToken(token)
+    if(!user){
+      throw new NotFoundException("invalid or expired token")
+    }
+    const hachedPassword = await argon2.hash(newPassword)
+    user.password = hachedPassword
+    user.resetPasswordToken = ""
+    user.resetPasswordExpires = 0
+    await user.save()
+    return "password reset successfully"
+ }
 
 
   async logout(userId:string){

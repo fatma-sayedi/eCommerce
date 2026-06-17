@@ -17,6 +17,11 @@ export class User {
     
          @Prop()
         password : string
+
+        @Prop()
+        resetPasswordToken : string
+        @Prop()
+        resetPasswordExpires : number
     
 }
 export const userSchema = SchemaFactory.createForClass(User)

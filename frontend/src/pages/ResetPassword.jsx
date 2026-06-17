@@ -1,6 +1,33 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { resetPasswordAction } from '../redux/actions/userActions'
+import { useDispatch } from 'react-redux'
+import { toast } from 'react-toastify'
+import { useNavigate, useParams } from 'react-router-dom'
 
 const ResetPassword = () => {
+   const [password, setPassword] = useState("")
+   const[confirmPassword, setconfirmPassword] = useState("")
+   const navigate = useNavigate()
+   const{token}=useParams()
+   const dispatch = useDispatch()
+
+  const handleReset =async (event) => {
+      try {
+        event.preventDefault()
+        
+       await dispatch(resetPasswordAction({token,password}))
+       navigate("/login")
+       
+  
+    
+        toast.success("reset password successfully")
+  
+      } catch (error) {
+        console.error("failed to reset")
+        toast.error("failed to reset password")
+  
+      }
+    }
   return (
    <div>
 
@@ -37,7 +64,7 @@ const ResetPassword = () => {
                             <div className="control-group">
                                 <input
                                     name="passWord" //nom base de donnée
-
+                value={password}
 
 
                                     type="password"
@@ -45,19 +72,21 @@ const ResetPassword = () => {
                                     id="pasword"
                                     placeholder="Your New Password"
                                     required="required"
+onChange={(e) => setPassword(e.target.value)}
                                 />
                                 <p className="help-block text-danger" />
                             </div>
 
                             <div className="control-group">
                                 <input
-                                    name="passWord" //nom base de donnée
+                                  value={confirmPassword}
                                 
                                     type="password"
-                                    className="form-control"
+                                    className="form-control" 
                                     id="pasword"
                                     placeholder="Confirm Your New Password"
                                     required="required"
+onChange={(e) => setconfirmPassword(e.target.value)}
                                 />
                                 <p className="help-block text-danger" />
                             </div>
@@ -69,7 +98,7 @@ const ResetPassword = () => {
                             <div>
                                 <button
                                    
-                                    className="btn btn-primary py-2 px-4 "
+                                    className="btn btn-primary py-2 px-4 " onClick={handleReset}
                                     type="submit"
                                     id="sendMessageButton"
                                 >

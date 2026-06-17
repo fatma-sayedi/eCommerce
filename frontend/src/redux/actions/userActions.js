@@ -63,3 +63,17 @@ export const logoutAction=createAsyncThunk(
             }
     }
 )
+
+export const resetPasswordAction=createAsyncThunk(
+    "user/reset",
+    async({token,password},{rejectwithvalue})=>{
+
+         try {
+            const response=await axios.post(`http://localhost:3001/auth/reset/${token}`, { password })
+             return response.data        } 
+             catch (error) {
+        
+         rejectwithvalue(error.response.data)   
+        }
+    }
+)
