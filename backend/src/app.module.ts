@@ -7,6 +7,7 @@ import { SubcategoryModule } from './subcategory/subcategory.module';
 import { ProductModule } from './product/product.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { CartModule } from './cart/cart.module';
 
 @Module({
   imports: [//connect to database
@@ -15,7 +16,8 @@ import { AuthModule } from './auth/auth.module';
     SubcategoryModule,
     ProductModule,
     UserModule,
-    AuthModule],
+    AuthModule,
+    CartModule],
   controllers: [AppController],
   providers: [AppService],
 })

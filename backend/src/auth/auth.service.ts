@@ -9,7 +9,7 @@ import * as argon2 from 'argon2';
 import { console } from 'inspector';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { EmailService } from 'mail/mail.service';
+import { EmailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class AuthService {
@@ -30,18 +30,39 @@ export class AuthService {
   //hachage de password
   const hachedPassword = await argon2.hash(createuserDto.password)
   const newUser =  await this.userService.create({...createuserDto,password:hachedPassword})
+  //envoie de emalil au fournisseur
+  const subject = "ajout du compte"
+  const htmlMessage =`<h2> hello  ${newUser.name} </h2><p>
+   welcome to our application your compte provider : ${newUser.email}  , ${createuserDto.password} 
+    </p>`
+    if(newUser.role === "provider")
+    {
+      const emailSend  = await this.emailService.sendResetEmail(
+        newUser.email,subject,htmlMessage
+
+      )
+       if( emailSend ){
+        return "email send successfully"
+
+       }
+       else {
+        return "failed to send email"
+       }
+    }
+   
+
   return newUser
   }
 
-  async generateTokens(userId:string, email:string){
+  async generateTokens(userId:string, email:string, role:string){
     const[accessToken, refreshToken ] = await Promise.all([
       this.jwtservice.signAsync(
-        {sub:userId, email},
+        {sub:userId, email, role},
         {secret:this.configService.get<string>("ACCESSKEY"),expiresIn:"3d"}
       ),
 
        this.jwtservice.signAsync(
-        {sub:userId, email},
+        {sub:userId, email, role},
         {secret:this.configService.get<string>("REFRESHKEY"),expiresIn:"10w"}
       )
     ]) 
@@ -60,7 +81,7 @@ export class AuthService {
   if(!matchedpassword){
     throw new NotFoundException("password doesn't match")
   }
-  const tokens = await this.generateTokens(existingUser._id.toString(),existingUser.email)
+  const tokens = await this.generateTokens(existingUser._id.toString(),existingUser.email, existingUser.role)
   
   return {existingUser, tokens}
 

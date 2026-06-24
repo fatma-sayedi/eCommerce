@@ -7,12 +7,15 @@ import userReducer from './slices/userSlices'
 import productReducer from './slices/productSlices'
 import categoryReducer from './slices/categorySlices'
 import subcategoryReducer from './slices/subCategorySlices'
+import Cartreducer from "./slices/CartSlices"
+
 
 const rootReducer = combineReducers({
     user:userReducer,
     product:productReducer,
     categories:categoryReducer,
-    subcategories:subcategoryReducer
+    subcategories:subcategoryReducer,
+    cart: Cartreducer
    
 
 })

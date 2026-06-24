@@ -10,5 +10,6 @@ export interface Iuser extends Document {
     password: string
     resetPasswordToken: string
     resetPasswordExpires: number
+    role: string
 
 }

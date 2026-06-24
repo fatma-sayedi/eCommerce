@@ -4,7 +4,7 @@ import { AuthController } from './auth.controller';
 import { UserModule } from 'src/user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
-import { EmailModule } from 'mail/mail.module';
+import { EmailModule } from 'src/mail/mail.module';
 import { AccessTokenStrategy } from './strategy/accessToken.strategy';
 
 @Module({

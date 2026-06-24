@@ -57,10 +57,10 @@ const Toabar = () => {
           <i className="fas fa-heart text-primary" />
           <span className="badge">0</span>
         </a>
-        <a href className="btn border">
+        <Link to = "/cart"className="btn border">
           <i className="fas fa-shopping-cart text-primary" />
           <span className="badge">0</span>
-        </a>
+       </Link>
       </div>
     </div>
   </div>

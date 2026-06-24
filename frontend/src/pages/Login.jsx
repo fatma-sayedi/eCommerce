@@ -16,15 +16,30 @@ const Login = () => {
     try {
       event.preventDefault()
       //appel de api depuis le backend //
-      dispatch(loginAction({ email, password }))
+      const result = await dispatch(loginAction({ email, password }))
+     console.log("result de l'api:", result)
+     const payload = result?.payload
+     console.log("retour payload:", payload)
+     const role = payload?.existingUser.role
 
-      navigate("/layout")
-      toast.success("reset email send successfully,check your email box")
+     console.log("role de user connecte:", role)
+      if (role === "admin") {
+        navigate("/layout")
+        toast.success("login successfully")
+      }
+      else if (role === "client") {
 
+      navigate("/")
+      toast.success("login successfully")
+
+    }
+    else if (role === "provider") {
+      navigate("/provider")
+      toast.success("login successfully")
+    }
     } catch (error) {
-      console.error("failed to connect")
-      toast.error("failed to send email")
-
+      console.error("failed to login")
+      toast.error("failed to login")
     }
   }
    const handleForgotPassWord = async ()=>{
@@ -66,7 +81,10 @@ const Login = () => {
                   >Submit</button>
                   
                 </div>
-                <button
+               
+
+              </form>
+               <button
                   onClick={handleForgotPassWord}
                   className="btn btn-link p-0 "
                   type="submit"
@@ -74,8 +92,6 @@ const Login = () => {
                   forgot password
                 </button>
 
-
-              </form>
             </div>
           </div>
           <div className="col-lg-5 mb-5">

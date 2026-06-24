@@ -22,6 +22,8 @@ export class User {
         resetPasswordToken : string
         @Prop()
         resetPasswordExpires : number
+        @Prop({type : String,enum : ['admin','client','provider'],default : 'client'})
+        role : string
     
 }
 export const userSchema = SchemaFactory.createForClass(User)

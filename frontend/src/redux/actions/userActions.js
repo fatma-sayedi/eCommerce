@@ -17,9 +17,11 @@ export const loginAction=createAsyncThunk(
 )
 export const registerAction=createAsyncThunk(
     "user/register",
-    async ({name,email,address,phoneNumber,password},{rejectwithvalue})=>{
+    async ({name,email,address,PhoneNumber,role,password},{rejectwithvalue})=>{
         try {
-            const response=await axios.post("http://localhost:3001/auth/register",{name,email,address,phoneNumber,password})
+            const payload = { name, email, address, PhoneNumber, password };
+            if (role) payload.role = role; // only send role when provided
+            const response=await axios.post("http://localhost:3001/auth/register", payload)
              return response.data        } 
              catch (error) {
         
@@ -77,3 +79,37 @@ export const resetPasswordAction=createAsyncThunk(
         }
     }
 )
+export const getAllUsersAction =createAsyncThunk(
+     "user/get",
+    async(_,{rejectwithvalue})=>{
+
+         try {
+            const accessToken =localStorage.getItem("accessToken")
+            const response=await axios.get("http://localhost:3001/user",{headers:{Authorization:`Bearer ${accessToken}`}})
+             return response.data        } 
+             catch (error) {
+        
+         rejectwithvalue(error.response.data)   
+        }
+    }
+)
+export  const deleteUserAction =createAsyncThunk(
+     "user/delete",
+    async(id,{rejectwithvalue})=>{
+
+         try {
+            console.log("les ids sont",id)
+            const accessToken =localStorage.getItem("accessToken")
+            const response=await axios.delete(`http://localhost:3001/user/${id}`,{headers:{Authorization:`Bearer ${accessToken}`}})
+             return response.data        } 
+             catch (error) {
+        
+         rejectwithvalue(error.response.data)   
+        }
+    }
+)
+
+
+
+
+

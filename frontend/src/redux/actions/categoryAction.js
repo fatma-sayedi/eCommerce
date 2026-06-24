@@ -14,8 +14,6 @@ export const gettAllcategoryAction = createAsyncThunk(
         
     }
  }
-
-
 )
 
 export const ajoutcategoryAction = createAsyncThunk(

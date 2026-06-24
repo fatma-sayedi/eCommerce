@@ -55,7 +55,7 @@ const GestionProduct = () => {
           await dispatch(getAllProductsAction())
           setModalDeleteOpen(false)
 
-          setName("")
+         
         } catch (error) {
           console.error("failed to delete", error)
         }

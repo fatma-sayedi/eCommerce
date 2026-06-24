@@ -4,6 +4,8 @@ import Toabar from './Toabar'
 import axios from "axios";
 import { getAllProductsAction } from '../redux/actions/productActions';
 import { useDispatch, useSelector } from 'react-redux';
+import { addCartAction } from '../redux/actions/CartAction';
+import { toast } from 'react-toastify';
 
 const Products = () => {
 
@@ -11,6 +13,7 @@ const Products = () => {
   const ListProduct=useSelector(state=>state.product.productlist)
   /* state.nameofSlice.initialState */
     const dispatch = useDispatch()
+ 
   //Affichage du contenu de la page dynamiquement
   useEffect(() => {
     //fonction fléchée 
@@ -29,6 +32,17 @@ const Products = () => {
     }
     fetchProduct()
   }, [])
+
+   const handleaddToCart= async(product)=>{
+         
+          try {
+          await dispatch(addCartAction({product,quantity:1}))
+          toast.success("product added successfully")
+          
+          } catch (error) {
+            console.error("failed to add", error)
+          }
+        }
   return (
 
     <div>   {/* Products Start */}
@@ -54,7 +68,7 @@ const Products = () => {
                 </div>
                 <div className="card-footer d-flex justify-content-between bg-light border">
                   <Link to={`/detail/${i._id}`} className="btn btn-sm text-dark p-0"><i className="fas fa-eye text-primary mr-1" />View Detail</Link>
-                  <a href className="btn btn-sm text-dark p-0"><i className="fas fa-shopping-cart text-primary mr-1" />Add To Cart</a>
+                  <a href className="btn btn-sm text-dark p-0"><i className="fas fa-shopping-cart text-primary mr-1"  onClick={()=>handleaddToCart(i._id)} />Add To Cart</a>
                 </div>
               </div>
             </div>
