@@ -43,8 +43,8 @@ export const deletecartAction = createAsyncThunk(
     "cart/delete",
  async(productId,{rejectedWithValue})=>{
     try {
-         const accessToken = localStorage.deleteItem("accessToken");
-         const response =await axios.get(`http://localhost:3001/cart/deleteProductFromCart/${productId}`, {
+         const accessToken = localStorage.getItem("accessToken");
+         const response =await axios.delete(`http://localhost:3001/cart/deleteProductFromCart/${productId}`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
@@ -52,6 +52,27 @@ export const deletecartAction = createAsyncThunk(
          return response.data
     } catch (error) {
          console.error("failed to delete", error)
+         
+         rejectedWithValue(error.response.data)   
+        
+    }
+ }
+)
+
+export const updatecartAction = createAsyncThunk(
+    "cart/update",
+ async({productId,quantity},{rejectedWithValue})=>{
+    try {
+         const accessToken = localStorage.getItem("accessToken");
+         const response =await axios.patch(`http://localhost:3001/cart/update/${productId}`,{quantity},
+             {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`
+                }
+            });
+         return response.data
+    } catch (error) {
+         console.error("failed to update", error)
          
          rejectedWithValue(error.response.data)   
         

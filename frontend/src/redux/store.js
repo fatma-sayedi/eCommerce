@@ -8,6 +8,8 @@ import productReducer from './slices/productSlices'
 import categoryReducer from './slices/categorySlices'
 import subcategoryReducer from './slices/subCategorySlices'
 import Cartreducer from "./slices/CartSlices"
+import orderReducer from "./slices/orderSlice"
+
 
 
 const rootReducer = combineReducers({
@@ -15,7 +17,8 @@ const rootReducer = combineReducers({
     product:productReducer,
     categories:categoryReducer,
     subcategories:subcategoryReducer,
-    cart: Cartreducer
+    cart: Cartreducer,
+    order: orderReducer
    
 
 })

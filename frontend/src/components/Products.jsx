@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Toabar from './Toabar'
 import axios from "axios";
 import { getAllProductsAction } from '../redux/actions/productActions';
@@ -13,6 +13,7 @@ const Products = () => {
   const ListProduct=useSelector(state=>state.product.productlist)
   /* state.nameofSlice.initialState */
     const dispatch = useDispatch()
+    const navigate = useNavigate()
  
   //Affichage du contenu de la page dynamiquement
   useEffect(() => {
@@ -38,6 +39,8 @@ const Products = () => {
           try {
           await dispatch(addCartAction({product,quantity:1}))
           toast.success("product added successfully")
+          navigate("/cart")
+
           
           } catch (error) {
             console.error("failed to add", error)

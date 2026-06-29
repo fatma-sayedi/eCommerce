@@ -3,12 +3,14 @@ import Footer from '../components/Footer'
 import Toabar from '../components/Toabar'
 import Navbar from '../components/Navbar'
 import { useDispatch, useSelector } from 'react-redux'
-import { deletecartAction, getcartAction } from '../redux/actions/CartAction'
+import { deletecartAction, getcartAction, updatecartAction } from '../redux/actions/CartAction'
+import { Link } from 'react-router-dom'
 
 const Cart = () => {
 
    const dispatch = useDispatch()
   const cartItem=useSelector(state=>state.cart?.cart?.items || [])
+  const subTotal= cartItem.reduce((i,j)=>i+j.product.price*j.quantity,0)
   console.log("la liste ",cartItem)
   useEffect(() => {
     const fetchCartItems = async() => {
@@ -41,6 +43,28 @@ const Cart = () => {
 
       } catch (error) {
         console.error("failed to delete", error)
+      }
+    }
+    const handleIncreaseQuantity = async(productId,quantity)=>{
+      try{
+        await dispatch(updatecartAction({productId,quantity}))
+        await dispatch(getcartAction())
+
+      } catch (error) {
+        console.error("failed to update", error)
+      }
+    }
+
+     const handleDecreaseQuantity = async(productId,quantity)=>{
+      try{
+        if(quantity>1){
+ await dispatch(updatecartAction({productId,quantity}))
+ await dispatch(getcartAction())
+        }
+       
+
+      } catch (error) {
+        console.error("failed to update", error)
       }
     }
   return (
@@ -81,19 +105,19 @@ const Cart = () => {
                     <td className="align-middle">
                       <div className="input-group quantity mx-auto" style={{ width: 100 }}>
                         <div className="input-group-btn">
-                          <button className="btn btn-sm btn-primary btn-minus">
+                          <button className="btn btn-sm btn-primary btn-minus" onClick={()=>handleDecreaseQuantity(i?.product?._id,i.quantity-1)}>
                             <i className="fa fa-minus" />
                           </button>
                         </div>
-                        <input type="text" className="form-control form-control-sm bg-secondary text-center" defaultValue={1} />
+                        <input type="text" className="form-control form-control-sm bg-secondary text-center" value={i?.quantity} />
                         <div className="input-group-btn">
-                          <button className="btn btn-sm btn-primary btn-plus">
+                          <button className="btn btn-sm btn-primary btn-plus"onClick={()=>handleIncreaseQuantity(i?.product?._id,i.quantity+1)}>
                             <i className="fa fa-plus" />
                           </button>
                         </div>
                       </div>
                     </td>
-                    <td className="align-middle">150</td>
+                    <td className="align-middle">{i.product.price * i.quantity}</td>
                     <td className="align-middle"><button className="btn btn-sm btn-primary" onClick={()=>handledeleteFromCart(i?.product?._id)}><i className="fa fa-times" /></button></td>
                   </tr>))
                 }
@@ -120,7 +144,7 @@ const Cart = () => {
               <div className="card-body">
                 <div className="d-flex justify-content-between mb-3 pt-1">
                   <h6 className="font-weight-medium">Subtotal</h6>
-                  <h6 className="font-weight-medium">$150</h6>
+                  <h6 className="font-weight-medium">{subTotal}</h6>
                 </div>
                 <div className="d-flex justify-content-between">
                   <h6 className="font-weight-medium">Shipping</h6>
@@ -130,9 +154,9 @@ const Cart = () => {
               <div className="card-footer border-secondary bg-transparent">
                 <div className="d-flex justify-content-between mt-2">
                   <h5 className="font-weight-bold">Total</h5>
-                  <h5 className="font-weight-bold">$160</h5>
+                  <h5 className="font-weight-bold">{subTotal+10}</h5>
                 </div>
-                <button className="btn btn-block btn-primary my-3 py-3">Proceed To Checkout</button>
+                <Link to = "/checkout" >< button className="btn btn-block btn-primary my-3 py-3">Proceed To Checkout</button> </Link> 
               </div>
             </div>
           </div>

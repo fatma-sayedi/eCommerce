@@ -57,6 +57,20 @@ async getCartByUserId(userId: string) {
     return  'product deleted from cart';
   }
 
+  async update(userId: string,productId:string,quantity:number){
+     const cart=  await this.cartEntity.findOne({user:userId})
+      if(!cart){
+      throw new  NotFoundException("cart not found")
+    }
+    const cartItem=cart.items.find((i)=>i.product.toString() === productId)
+    if(!cartItem){
+      throw new  NotFoundException("product not found in the cart")
+    }
+    cartItem.quantity= quantity
+    return cart.save()
+
+    
+  }
 
 
 }

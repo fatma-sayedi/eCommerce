@@ -31,4 +31,11 @@ return this.cartService.getCartByUserId(req.user.userId)
 return this.cartService.remove(req.user.userId,productId)
   }
 
+  @ApiBearerAuth('accessToken')
+  @UseGuards(AuthGuard('jwt'))
+  @Patch("/update/:productId")
+  updateCartItem(@Req() req, @Param('productId') productId:string,@Body()updateCartDto:UpdateCartDto){
+    return this.cartService.update(req.user.userId,productId,updateCartDto.quantity)
+
+  }
 }

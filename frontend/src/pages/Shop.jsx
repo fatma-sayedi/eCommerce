@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Toabar from '../components/Toabar'
 import { getProductsBySubCategoryAction } from '../redux/actions/productActions'
 import { useDispatch, useSelector } from 'react-redux'
@@ -6,6 +6,8 @@ import { useParams } from 'react-router-dom'
 
 
 const Shop = () => {
+
+    const[search,setSearch]= useState("")
     const dispatch=useDispatch()
     const {id}=useParams()
     useEffect(()=>{
@@ -21,7 +23,7 @@ const Shop = () => {
     }, [id])
 
     const products = useSelector(state => state.product.productsBySubCategory) ?? []
-
+  const filteredProduct=products.filter((i)=>i.name.toLowerCase().includes(search.toLowerCase()))
   return (
     <div>
         <Toabar/>
@@ -163,7 +165,7 @@ const Shop = () => {
             <div className="d-flex align-items-center justify-content-between mb-4">
               <form action>
                 <div className="input-group">
-                  <input type="text" className="form-control" placeholder="Search by name" />
+                  <input type="text" className="form-control" placeholder="Search by name" value={search} onChange={(e)=>setSearch(e.target.value)} />
                   <div className="input-group-append">
                     <span className="input-group-text bg-transparent text-primary">
                       <i className="fa fa-search" />
@@ -183,7 +185,7 @@ const Shop = () => {
               </div>
             </div>
           </div>
-          {products.map((product) => (
+          {filteredProduct.map((product) => (
               <div className="col-lg-4 col-md-6 col-sm-12 pb-1">
             <div className="card product-item border-0 mb-4">
               <div className="card-header product-img position-relative overflow-hidden bg-transparent border p-0">

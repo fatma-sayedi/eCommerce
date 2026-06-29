@@ -8,6 +8,7 @@ import { ProductModule } from './product/product.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { CartModule } from './cart/cart.module';
+import { OrderModule } from './order/order.module';
 
 @Module({
   imports: [//connect to database
@@ -17,7 +18,8 @@ import { CartModule } from './cart/cart.module';
     ProductModule,
     UserModule,
     AuthModule,
-    CartModule],
+    CartModule,
+    OrderModule],
   controllers: [AppController],
   providers: [AppService],
 })
