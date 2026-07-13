@@ -5,8 +5,19 @@ import axios from 'axios'
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { registerAction } from '../redux/actions/userActions';
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
+const registerSchema = yup.object({
+  
+  name:yup.string().required("name est obligatoire").min(3,"le nom doit contenir au moins 3 caractères "),
+    email:yup.string().required("email est obligatoire").email("veuillez entrer un email valide"),
+    password:yup.string().required("password est obligatoire").min(6,"le password doit contenir au moins 6 caractères "),
+    PhoneNumber:yup.string().required("number est obligatoire").min(8,"le numero doit contenir au moins 8 caractères "),
+    address:yup.string().required("adresse est obligatoire").min(4,"le adresse doit contenir au moins 4 caractères ")
 
+})
 const Register = () => {
   const[name,setName] = useState("")
 const[email,setEmail]= useState("")
@@ -15,10 +26,13 @@ const[phoneNumber,setPhoneNumber]= useState("")
 const[password,setPassword]= useState("")
 const navigate = useNavigate()
   const dispatch = useDispatch()
-const handleRegister = async(event)=>{
+ const{register,handleSubmit,getValues,formState:{errors}}
+= useForm({resolver:yupResolver(registerSchema)})
+const handleRegister = async(data)=>{
 
 try {
-  event.preventDefault()
+  const data={name,email,address,phoneNumber,password}
+ 
     dispatch(registerAction({name,email,address,phoneNumber,password}))
         navigate("/login")
   
@@ -42,27 +56,28 @@ try {
     <div className="col-lg-7 mb-5">
       <div className="contact-form">
         <div id="success" />
-        <form  onSubmit={handleRegister} name="sentMessage" id="contactForm" noValidate="novalidate">
+        <form  onSubmit={handleSubmit(handleRegister)} name="sentMessage" id="contactForm" noValidate="novalidate">
           <div className="control-group">
-            <input  value ={name} onChange={(e)=>setName(e.target.value)} type="text" className="form-control" id="name" placeholder="Your Full Name" required="required" data-validation-required-message="Please enter your name" />
-            <p className="help-block text-danger" />
+            <input {...register("name")}  value ={name} onChange={(e)=>setName(e.target.value)} type="text" className="form-control" id="name" placeholder="Your Full Name" required="required" data-validation-required-message="Please enter your name" />
+              {errors.name && ( <p className="help-block text-danger" >{errors.name.message}</p>)}
           </div>
           <div className="control-group">
             <input  value ={email} onChange={(e)=>setEmail(e.target.value)}type="email" className="form-control" id="email" placeholder="Your Email" required="required" data-validation-required-message="Please enter your email" />
-            <p className="help-block text-danger" />
+           {errors.email && ( <p className="help-block text-danger" >{errors.email.message}</p>)}
+          
           </div>
             <div className="control-group">
-            <input  value ={address} onChange={(e)=>setAddress(e.target.value)} type="text" className="form-control" id="address" placeholder="Address" required="required" data-validation-required-message="Please enter your email" />
-            <p className="help-block text-danger" />
+            <input  {...register("address")} value ={address} onChange={(e)=>setAddress(e.target.value)} type="text" className="form-control" id="address" placeholder="Address" required="required" data-validation-required-message="Please enter your email" />
+           {errors.address && ( <p className="help-block text-danger" >{errors.address.message}</p>)}
           </div>
           
           <div className="control-group">
-            <input  value ={password} onChange={(e)=>setPassword(e.target.value)}  type="password" className="form-control" id="subject" placeholder="Password" required="required" data-validation-required-message="Please enter a subject" />
-            <p className="help-block text-danger" />
+            <input  {...register("password")} value ={password} onChange={(e)=>setPassword(e.target.value)}  type="password" className="form-control" id="subject" placeholder="Password" required="required" data-validation-required-message="Please enter a subject" />
+            {errors.password && ( <p className="help-block text-danger" >{errors.password.message}</p>)}
           </div>
             <div className="control-group">
-            <input  value ={phoneNumber} onChange={(e)=>setPhoneNumber(e.target.value)} type="number" className="form-control" id="email" placeholder="Your Phone Number" required="required" data-validation-required-message="Please enter your email" />
-            <p className="help-block text-danger" />
+            <input {...register("phoneNumber")}  value ={phoneNumber} onChange={(e)=>setPhoneNumber(e.target.value)} type="number" className="form-control" id="email" placeholder="Your Phone Number" required="required" data-validation-required-message="Please enter your email" />
+            {errors.phoneNumber && ( <p className="help-block text-danger" >{errors.phoneNumber.message}</p>)}
           </div>
            <div>
                             <button className="btn btn-primary py-2 px-4" type="submit" id="sendMessageButton">Submit</button>

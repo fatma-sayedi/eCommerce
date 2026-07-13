@@ -6,15 +6,29 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { forgotPasswordAction, loginAction } from '../redux/actions/userActions';
 import { toast } from 'react-toastify';
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+
+//schema de validation pour le formulaire de login
+const loginSchema = yup.object({
+  email:yup.string().required("email est obligatoire").email("veuillez entrer un email valide"),
+  password:yup.string().required("password est obligatoire").min(6,"le password doit contenir au moins 6 caractères ")
+
+})
+
 
 const Login = () => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const handleLogin = async (event) => {
+  const{register,handleSubmit,getValues,formState:{errors}}
+= useForm({resolver:yupResolver(loginSchema)})
+
+  const handleLogin = async (data) => {
     try {
-      event.preventDefault()
+      const{email,password}=data
       //appel de api depuis le backend //
       const result = await dispatch(loginAction({ email, password }))
      console.log("result de l'api:", result)
@@ -62,17 +76,19 @@ const Login = () => {
           <div className="col-lg-7 mb-5">
             <div className="contact-form">
               <div id="success" />
-              <form  name="sentMessage" id="contactForm" noValidate="novalidate">
+              <form onSubmit={handleSubmit(handleLogin)}  name="sentMessage" id="contactForm" noValidate="novalidate">
 
                 <div className="control-group">
-                  <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" className="form-control" id="email" placeholder="Your Email" required="required" data-validation-required-message="Please enter your email" />
-                  <p className="help-block text-danger" />
+                  <input  {...register("email")} value={email} onChange={(e) => setEmail(e.target.value)} type="email" className="form-control" id="email" placeholder="Your Email" required="required" data-validation-required-message="Please enter your email" />
+                 {errors.email && ( <p className="help-block text-danger" >{errors.email.message}</p>)}
+                 
                 </div>
 
 
                 <div className="control-group">
-                  <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" className="form-control" id="subject" placeholder="Password" required="required" data-validation-required-message="Please enter a subject" />
-                  <p className="help-block text-danger" />
+                  <input {...register("password")} value={password} onChange={(e) => setPassword(e.target.value)} type="password" className="form-control" id="subject" placeholder="Password" required="required" data-validation-required-message="Please enter a subject" />
+                  {errors.password && ( <p className="help-block text-danger" >{errors.password.message}</p>)}
+                 
                 </div>
 
                 <div>
